@@ -43,10 +43,7 @@
       "fragment": "Even for drivers this intersection fails. People cannot tell whether it is one-way or two-way, the second parkway node adds confusion, and the intersection is so wide that left-turning cars cut the corner badly and right-turning cars take the turn at 45 to 50 degrees — almost a slingshot — instead of a safe 90-degree turn. A clearer, squared-up design makes it safer for drivers too." },
     { "id": "pedestrians", "label": "No safe way to cross on foot", "defaultSelected": false,
       "context": "There's no clear, safe way to cross on foot.",
-      "fragment": "There is no clear, safe way for a person on foot to get from one side to the other. Crossings are unmarked and the distances are long and exposed." },
-    { "id": "jurisdiction", "label": "One coordinated fix across city and parks", "defaultSelected": false,
-      "context": "City and Park Board land meet here — but one Public Works team can fix it.",
-      "fragment": "Park Avenue is a city street up to about a block from the intersection, and the intersection itself is Park Board land. The encouraging part is that Minneapolis Public Works does the work for both the city and the parks, so a coordinated fix is very achievable. With your leadership on funding and scheduling, this can finally move forward." }
+      "fragment": "There is no clear, safe way for a person on foot to get from one side to the other. Crossings are unmarked and the distances are long and exposed." }
   ],
   "ask": {
     "summary": "This intersection is already named in the Minnehaha Parkway master plan, but it is unfunded and unscheduled. I am asking you to:",
