@@ -1,0 +1,63 @@
+{
+  "campaign": {
+    "title": "Park Ave & Minnehaha Parkway — Make It Safe",
+    "subtitle": "A friendly, urgent ask to fix a dangerous intersection",
+    "intersection": "Park Avenue & Minnehaha Parkway, Minneapolis"
+  },
+  "recipients": [
+    { "id": "ward8",     "body": "City Council", "role": "Ward 8",     "name": "Soren Stevenson",
+      "email": "soren.stevenson@minneapolismn.gov", "salutation": "Dear Council Member Stevenson", "shown": true },
+    { "id": "ward11",    "body": "City Council", "role": "Ward 11",    "name": "Jamison Whiting",
+      "email": "jamison.whiting@minneapolismn.gov", "salutation": "Dear Council Member Whiting", "shown": true },
+    { "id": "moran",     "body": "Park Board",   "role": "District 5", "name": "Kay Carvajal Moran",
+      "email": "kmoran@minneapolisparks.org", "salutation": "Dear Commissioner Carvajal Moran", "shown": true },
+    { "id": "olsen",     "body": "Park Board",   "role": "At-Large",   "name": "Tom Olsen",
+      "email": "tolsen@minneapolisparks.org", "salutation": "Dear Commissioner Olsen", "shown": true },
+    { "id": "forney",    "body": "Park Board",   "role": "At-Large",   "name": "Meg Forney",
+      "email": "mforney@minneapolisparks.org", "salutation": "Dear Commissioner Forney", "shown": false },
+    { "id": "frederick", "body": "Park Board",   "role": "At-Large",   "name": "Amber A. Frederick",
+      "email": "afrederick@minneapolisparks.org", "salutation": "Dear Commissioner Frederick", "shown": false }
+  ],
+  "perspectives": [
+    { "id": "parent",   "label": "Parent",
+      "opening": "As a parent of kids who travel through Park Ave and Minnehaha Parkway, I am writing to ask you to make this intersection safe." },
+    { "id": "bike",     "label": "Person who bikes",
+      "opening": "As someone who bikes through the Park Ave and Minnehaha Parkway intersection, I am writing to ask you to make it safe." },
+    { "id": "drive",    "label": "Driver",
+      "opening": "As someone who drives through the Park Ave and Minnehaha Parkway intersection, I am writing because it is confusing and dangerous and needs to be fixed." },
+    { "id": "walk",     "label": "Person who walks",
+      "opening": "As someone who walks through the Park Ave and Minnehaha Parkway intersection, I am writing to ask you to make it safe to cross." },
+    { "id": "neighbor", "label": "Neighbor",
+      "opening": "As a neighbor near Park Ave and Minnehaha Parkway, I am writing to ask you to make this intersection safe." }
+  ],
+  "defaultPerspective": "parent",
+  "talkingPoints": [
+    { "id": "schools", "label": "A daily route to four schools", "defaultSelected": true,
+      "fragment": "This intersection is a daily route to Hale Elementary, Field Elementary, Justice Page Middle School, and Washburn High School. Kids cross here every single day, and the current design makes that crossing dangerous and stressful for them and their families." },
+    { "id": "bike", "label": "The Park Ave bikeway to Parkway trail seam", "defaultSelected": true,
+      "fragment": "This is a primary connection between the Park Avenue bike facilities and the Minnehaha Parkway trail system. A major link in our bike network should be one of the clearest, safest intersections in the city — instead it is confusing, unmarked, and frankly dangerous." },
+    { "id": "drivers", "label": "Confusing and fast for drivers", "defaultSelected": true,
+      "fragment": "Even for drivers this intersection fails. People cannot tell whether it is one-way or two-way, the second parkway node adds confusion, and the intersection is so wide that left-turning cars cut the corner badly and right-turning cars take the turn at 45 to 50 degrees — almost a slingshot — instead of a safe 90-degree turn. A clearer, squared-up design makes it safer for drivers too." },
+    { "id": "pedestrians", "label": "No safe way to cross on foot", "defaultSelected": true,
+      "fragment": "There is no clear, safe way for a person on foot to get from one side to the other. Crossings are unmarked and the distances are long and exposed." },
+    { "id": "jurisdiction", "label": "One crew, one fix — no jurisdictional excuse", "defaultSelected": true,
+      "fragment": "Park Avenue is a city street up to about a block from the intersection, and the intersection itself is Park Board land — but Minneapolis Public Works does the work for both the city and the parks. There is no jurisdictional wall here, only a gap in funding and scheduling. You are exactly the people who can close that gap." }
+  ],
+  "ask": {
+    "summary": "This intersection is already named in the Minnehaha Parkway master plan, but it is unfunded and unscheduled. I am asking you to:",
+    "items": [
+      "Get an interim quick-build safety fix (paint, flex-posts, daylighting, clear markings) installed this summer.",
+      "Fund the permanent concrete redesign the master plan envisions and put it on the schedule."
+    ],
+    "closing": "This is a rare win-win-win: a safer intersection for kids and people walking, a real bike-network connection, and a clearer, safer crossing for drivers. Thank you for championing it."
+  },
+  "emailDefaults": {
+    "subject": "Please prioritize a safety fix at Park Ave & Minnehaha Parkway"
+  },
+  "meta": {
+    "ogTitle": "Park Ave & Minnehaha Parkway — Make It Safe",
+    "ogDescription": "Email Minneapolis City Council and Park Board to fix a dangerous intersection for kids, people on bikes, walkers, and drivers.",
+    "ogImage": "images/intersection-aerial.svg",
+    "shareText": "Help make the Park Ave & Minnehaha Parkway intersection safe — email Minneapolis City Council and Park Board in one click."
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "park-and-minnehaha",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Single-page campaign to fix the Park Ave & Minnehaha Parkway intersection",
+  "scripts": {
+    "test": "node --test",
+    "serve": "python3 -m http.server 8080"
+  }
+}
