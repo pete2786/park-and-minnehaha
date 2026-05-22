@@ -7,3 +7,9 @@ export function shownRecipients(campaign) {
 export function buildMailtoUrl(email, subject, body) {
   return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
+
+export function selectedFragments(campaign, selectedIds) {
+  return campaign.talkingPoints
+    .filter(p => selectedIds.includes(p.id))
+    .map(p => p.fragment);
+}
