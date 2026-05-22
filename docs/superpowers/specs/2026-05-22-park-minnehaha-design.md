@@ -8,17 +8,20 @@
 
 ## 1. Summary
 
-A focused, single-page web app that helps neighbors email Minneapolis City Council
-Members **Soren Stevenson (Ward 8)** and **Jamison Whiting (Ward 11)** asking them to
-prioritize a safety fix at the intersection of **Park Avenue and Minnehaha Parkway**.
+A focused, single-page web app that helps neighbors email the four public officials who
+share responsibility for the intersection of **Park Avenue and Minnehaha Parkway** — City
+Council Members **Soren Stevenson (Ward 8)** and **Jamison Whiting (Ward 11)**, and Park
+Board Commissioners **Kay Carvajal Moran (District 5)** and **Tom Olsen (At-Large)** — asking
+them to prioritize a safety fix.
 
 Unlike its predecessor *Operation Defrost* (which targets a hostile federal audience and
 must work across the political spectrum), this campaign is **friendly and collaborative**.
-The council members are allies who have *asked* for emails — they need a visible volume of
-constituent demand to make the case to Public Works, the Park Board, and other city leaders.
+These officials are allies who have *asked* for emails — they need a visible volume of
+constituent demand to make the case to Public Works and other city/park leaders.
 
-The app generates a personalized, ready-to-send email and opens it in the sender's email
-client with one click. Everything runs in the browser. Nothing is collected.
+The app generates a personalized email and opens it in the sender's email client — **one
+personally-addressed message per official** (see §6 for why individual, not a single CC).
+Everything runs in the browser. Nothing is collected.
 
 ## 2. The campaign
 
@@ -56,16 +59,27 @@ a cars-vs-bikes fight.
 
 ## 3. Recipients
 
-| Ward | Member | Email | Office phone |
-|------|--------|-------|--------------|
-| 8 | Soren Stevenson | `soren.stevenson@minneapolismn.gov` | 612-673-2208 |
-| 11 | Jamison Whiting | `jamison.whiting@minneapolismn.gov` | 612-673-2211 |
+Two governing bodies share this intersection, so the campaign emails officials from both —
+**individually**, one personally-addressed email each (see §6 for why).
 
-*(Verified from the official City of Minneapolis council member pages on 2026-05-22.)*
+**Shown by default (four):**
 
-A **Ward 8 / Ward 11 / Both** selector replaces Operation Defrost's ZIP-code rep lookup.
-**Default: Both** — the intersection is the boundary seam between the two wards. The selected
-members' addresses populate the email `To:` field.
+| Body | Member | Role | Email |
+|------|--------|------|-------|
+| City Council | Soren Stevenson | Ward 8 | `soren.stevenson@minneapolismn.gov` |
+| City Council | Jamison Whiting | Ward 11 | `jamison.whiting@minneapolismn.gov` |
+| Park Board | Kay Carvajal Moran | District 5 (covers Field, Hale, Page, Minnehaha) | `kmoran@minneapolisparks.org` |
+| Park Board | Tom Olsen | At-Large (President; strong bike advocate) | `tolsen@minneapolisparks.org` |
+
+**Kept in `campaign.json` but hidden by default** (re-enabling is a one-flag change): the
+other two at-large Park Board commissioners — Meg Forney (`mforney@minneapolisparks.org`)
+and Amber A. Frederick (`afrederick@minneapolisparks.org`).
+
+*(All addresses verified from the official minneapolismn.gov and minneapolisparks.org pages
+on 2026-05-22. Council office phones: Stevenson 612-673-2208, Whiting 612-673-2211.)*
+
+This replaces Operation Defrost's ZIP-code rep lookup. There is no "ward / both" toggle —
+the four recipients are presented as a **send checklist** (§6), one email per official.
 
 ## 4. Architecture
 
@@ -90,7 +104,7 @@ share block (copy URL + X/Facebook/Instagram), the GitHub Pages workflow.
   the OG/Twitter meta tags live directly in `<head>` and crawlers read them with no JS.
 
 ### What we add
-- The Ward 8 / Ward 11 / Both recipient selector.
+- The Council + Park Board recipient **send checklist** (one individual email per official).
 - "Who are you?" perspective framing + an optional free-text personal note.
 - **One-click `mailto:` delivery** (with a copy-to-clipboard fallback).
 
@@ -115,15 +129,20 @@ share block (copy URL + X/Facebook/Instagram), the GitHub Pages workflow.
 |  fund it. Interim fix this summer + permanent   |
 |  concrete redesign scheduled & funded.          |
 +-----------------------------------------------+
-|  WRITE THE COUNCIL                             |
+|  WRITE COUNCIL + PARK BOARD                    |
 |   1. I am a... (.)parent ( )bike ( )drive       |
 |                ( )walk ( )neighbor              |
 |   2. Include: [x][x][x][x][x] the five points  |
 |   3. Your note (optional): _________________    |
 |   4. Your name + address (you're a constituent)|
-|   5. Send to: ( )Ward 8 ( )Ward 11 (.)Both     |
 |   ------  live email preview (subject+body) --- |
-|   [ Open in your email app ]   [ Copy email ]   |
+|   5. Send each (4 individual emails):           |
+|       CITY COUNCIL                              |
+|        [ Email Stevenson (W8) ]      [copy]     |
+|        [ Email Whiting (W11) ]       [copy]     |
+|       PARK BOARD                                |
+|        [ Email Carvajal Moran (D5) ] [copy]     |
+|        [ Email Olsen (At-Large) ]    [copy]     |
 +-----------------------------------------------+
 |  SHARE  (copy URL · X · Facebook · Instagram)  |
 |  Footer: nothing is collected · who made it    |
@@ -134,8 +153,8 @@ share block (copy URL + X/Facebook/Instagram), the GitHub Pages workflow.
 
 The composed email is assembled from these parts, in order:
 
-1. **Greeting** — adapts to the selected recipients
-   (e.g. "Dear Council Members Stevenson and Whiting," / "Dear Council Member Stevenson,").
+1. **Greeting** — each individual email uses that recipient's own salutation
+   (e.g. "Dear Council Member Stevenson," / "Dear Commissioner Carvajal Moran,").
 2. **Opening line** — keyed to the chosen perspective (see §7).
 3. **Selected talking points** — each included angle contributes one clean paragraph (§7).
 4. **Personal note** — if the sender wrote one, it becomes its own paragraph. This is what
@@ -147,13 +166,28 @@ Placeholders (`[Your Name]`, `[Your Address]`) show in the live preview until fi
 like Operation Defrost. The preview updates live as the sender toggles points, switches
 perspective, edits the note, or changes recipients.
 
-### Delivery
-- **Primary:** an "Open in your email app" button builds a `mailto:` link with `to`
-  (selected members, comma-separated), `subject`, and `body` pre-filled, URL-encoded.
-- **Fallback:** a "Copy email" button copies the full body to the clipboard and shows the
-  recipient address(es) so the sender can paste into any mail client / webmail.
-- `mailto:` cannot confirm a send, and long bodies can hit client limits — the copy fallback
-  covers both cases. We will keep the body within a sane length.
+### Delivery — individual emails, one per recipient
+The four recipients are a **send checklist**, not a single combined send. One
+personally-addressed email per official lands as a distinct constituent contact; a single
+multi-way CC across two separate governing bodies reads as a blast and gets weighted like one.
+**Decision: strictly individual for v1 — no "send to all at once" button.**
+
+For each recipient:
+- **Primary:** an "Email <name>" button builds a `mailto:` link addressed to that one official,
+  with their correct salutation in the body, plus the shared subject and body, URL-encoded.
+- **Fallback:** a per-recipient "copy" action copies that email's body (with the right
+  salutation) and surfaces the address, for webmail / manual senders.
+- After its button is used, a recipient flips to a **"✓ opened"** state — a purely local
+  visual cue to help the sender track progress. It is **not** tracking and persists nothing.
+
+The email **body is identical across the four** (v1): the sender's chosen perspective,
+talking points, and personal note already personalize it, and the bike/trail point is on by
+default so a bike-champion recipient still receives it. Only the salutation differs.
+`mailto:` can't confirm a send and long bodies can hit client limits — the copy fallback
+covers both; we keep the body within a sane length.
+
+*(Deferred option: tailoring emphasis per recipient — e.g., leading with the bike-network
+point for Commissioner Olsen and the schools/constituent angle for the ward members.)*
 
 ## 7. Content model (`data/campaign.json`)
 
@@ -168,13 +202,22 @@ perspective, edits the note, or changes recipients.
     "intersection": "Park Avenue & Minnehaha Parkway, Minneapolis"
   },
 
+  // "shown": true recipients appear in the send checklist by default; hidden ones
+  // (Forney, Frederick) stay here so re-enabling them is a one-flag change.
   "recipients": [
-    { "id": "ward8",  "ward": 8,  "name": "Soren Stevenson",
-      "email": "soren.stevenson@minneapolismn.gov", "salutation": "Council Member Stevenson" },
-    { "id": "ward11", "ward": 11, "name": "Jamison Whiting",
-      "email": "jamison.whiting@minneapolismn.gov", "salutation": "Council Member Whiting" }
+    { "id": "ward8",     "body": "City Council", "role": "Ward 8",     "name": "Soren Stevenson",
+      "email": "soren.stevenson@minneapolismn.gov", "salutation": "Dear Council Member Stevenson", "shown": true },
+    { "id": "ward11",    "body": "City Council", "role": "Ward 11",    "name": "Jamison Whiting",
+      "email": "jamison.whiting@minneapolismn.gov", "salutation": "Dear Council Member Whiting", "shown": true },
+    { "id": "moran",     "body": "Park Board",   "role": "District 5", "name": "Kay Carvajal Moran",
+      "email": "kmoran@minneapolisparks.org", "salutation": "Dear Commissioner Carvajal Moran", "shown": true },
+    { "id": "olsen",     "body": "Park Board",   "role": "At-Large",   "name": "Tom Olsen",
+      "email": "tolsen@minneapolisparks.org", "salutation": "Dear Commissioner Olsen", "shown": true },
+    { "id": "forney",    "body": "Park Board",   "role": "At-Large",   "name": "Meg Forney",
+      "email": "mforney@minneapolisparks.org", "salutation": "Dear Commissioner Forney", "shown": false },
+    { "id": "frederick", "body": "Park Board",   "role": "At-Large",   "name": "Amber A. Frederick",
+      "email": "afrederick@minneapolisparks.org", "salutation": "Dear Commissioner Frederick", "shown": false }
   ],
-  "defaultRecipients": ["ward8", "ward11"],
 
   "perspectives": [
     { "id": "parent",   "label": "Parent",
@@ -289,9 +332,12 @@ themselves opens/sends. The footer states this plainly.
 
 ## 14. Testing (manual checklist)
 
-- "Open in your email app" opens a mail client with correct To / Subject / Body.
-- "Both" puts both addresses in To; Ward 8 / Ward 11 each put the single correct address.
-- Greeting and recipient list update with the ward selector.
+- Each "Email <name>" button opens a mail client addressed to that one official, with the
+  correct salutation, subject, and body.
+- The four default recipients (Stevenson, Whiting, Carvajal Moran, Olsen) each get their own
+  send button; hidden commissioners (Forney, Frederick) do not appear unless re-enabled.
+- A recipient's button flips to "✓ opened" after use and persists nothing on reload.
+- Per-recipient "copy" copies that email's body (with the correct salutation) and surfaces the address.
 - Toggling each talking point adds/removes its paragraph in the live preview.
 - Switching perspective changes the opening line.
 - Typing a personal note inserts it as its own paragraph; empty note omits it cleanly.
