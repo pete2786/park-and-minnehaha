@@ -3,3 +3,7 @@
 export function shownRecipients(campaign) {
   return campaign.recipients.filter(r => r.shown);
 }
+
+export function buildMailtoUrl(email, subject, body) {
+  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}

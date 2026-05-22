@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { shownRecipients } from '../js/compose.js';
+import { shownRecipients, buildMailtoUrl } from '../js/compose.js';
 
 const campaign = JSON.parse(
   readFileSync(new URL('../data/campaign.json', import.meta.url), 'utf8')
@@ -16,4 +16,9 @@ test('shownRecipients excludes hidden commissioners', () => {
   const ids = shownRecipients(campaign).map(r => r.id);
   assert.ok(!ids.includes('forney'));
   assert.ok(!ids.includes('frederick'));
+});
+
+test('buildMailtoUrl encodes subject and body and addresses one recipient', () => {
+  const url = buildMailtoUrl('a@b.com', 'Hi there', 'Line1\nLine2 & more');
+  assert.equal(url, 'mailto:a@b.com?subject=Hi%20there&body=Line1%0ALine2%20%26%20more');
 });
