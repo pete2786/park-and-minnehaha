@@ -77,17 +77,20 @@
         </div>
       </div>
 
+      <div>
+        <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">4. Send to</h3>
+        <p class="text-xs text-gray-500 mb-2">Four individual, personally-addressed emails. Pick each one, review it below, and send.</p>
+        <div id="recipient-select"></div>
+      </div>
+
       <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
         <p class="text-sm font-medium text-gray-700 mb-1">Subject</p>
         <p id="preview-subject" class="text-sm bg-white p-2 rounded border border-gray-300"></p>
-        <p class="text-sm font-medium text-gray-700 mt-3 mb-1">Preview</p>
+        <p class="text-sm font-medium text-gray-700 mt-3 mb-1">Preview — addressed to the selected recipient</p>
         <pre id="preview-body" class="text-sm bg-white p-3 rounded border border-gray-300 whitespace-pre-wrap font-sans"></pre>
       </div>
 
-      <div>
-        <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">4. Send to each (individual emails)</h3>
-        <div id="send-list" class="space-y-4"></div>
-      </div>
+      <div id="send-row" class="flex gap-2"></div>
     </section>
 
     <!-- Share -->

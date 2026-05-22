@@ -4,6 +4,8 @@ import { shownRecipients, selectedFragments, composeEmailBody, buildMailtoUrl, c
 let campaign = null;
 const selectedPerspectives = new Set();
 const selectedPoints = new Set();
+let selectedRecipientId = null;
+const openedRecipients = new Set();
 
 // ── Data loading ───────────────────────────────────────────
 async function loadCampaign() {
@@ -102,10 +104,9 @@ function bodyForRecipient(c, recipient) {
 
 function updatePreview(c) {
   document.getElementById('preview-subject').textContent = c.emailDefaults.subject;
-  // Preview uses the first shown recipient's salutation as a representative example.
-  const previewRecipient = shownRecipients(c)[0];
-  document.getElementById('preview-body').textContent = bodyForRecipient(c, previewRecipient);
-  if (document.querySelector('[data-send]')) refreshSendLinks(c);
+  const r = selectedRecipient(c) || shownRecipients(c)[0];
+  document.getElementById('preview-body').textContent = bodyForRecipient(c, r);
+  if (document.getElementById('send-row')) updateSendRow(c);
 }
 
 function wireWidget(c) {
@@ -114,67 +115,77 @@ function wireWidget(c) {
   });
 }
 
-// ── Send checklist (one individual email per recipient) ────
-function renderSendList(c) {
-  const recipients = shownRecipients(c);
-  const bodies = {};                       // group recipients by governing body
-  recipients.forEach(r => { (bodies[r.body] ||= []).push(r); });
+// ── Recipient picker (above the email) + send row ──────────
+function selectedRecipient(c) {
+  return shownRecipients(c).find(r => r.id === selectedRecipientId);
+}
 
-  const host = document.getElementById('send-list');
-  host.innerHTML = Object.entries(bodies).map(([body, members]) => `
-    <div>
-      <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">${body}</p>
-      <div class="space-y-2">
-        ${members.map(r => `
-          <div class="flex items-center gap-2" data-recipient="${r.id}">
-            <a href="#" data-send="${r.id}"
-               class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium">
-              Email ${r.name} (${r.role})
-            </a>
-            <button type="button" data-copy="${r.id}"
-               class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">Copy</button>
-          </div>
-        `).join('')}
+function renderRecipientSelect(c) {
+  const recipients = shownRecipients(c);
+  if (!selectedRecipientId) selectedRecipientId = recipients[0].id;
+
+  const groups = {};                       // group recipients by governing body
+  recipients.forEach(r => { (groups[r.body] ||= []).push(r); });
+
+  const host = document.getElementById('recipient-select');
+  host.innerHTML = Object.entries(groups).map(([body, members]) => `
+    <div class="mb-2">
+      <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">${body}</p>
+      <div class="flex flex-wrap gap-2">
+        ${members.map(r => `<button type="button" data-pick="${r.id}"></button>`).join('')}
       </div>
     </div>
   `).join('');
 
-  // Set/refresh each send link's mailto href whenever it (or anything) changes.
-  refreshSendLinks(c);
-
-  host.addEventListener('click', async e => {
-    const sendEl = e.target.closest('[data-send]');
-    const copyEl = e.target.closest('[data-copy]');
-    if (sendEl) {
-      markOpened(sendEl);                  // let the default mailto navigation proceed
-      return;
-    }
-    if (copyEl) {
-      e.preventDefault();
-      const r = recipients.find(x => x.id === copyEl.dataset.copy);
-      await navigator.clipboard.writeText(bodyForRecipient(c, r));
-      const original = copyEl.textContent;
-      copyEl.textContent = '✓ Copied';
-      setTimeout(() => { copyEl.textContent = original; }, 2000);
-    }
+  host.addEventListener('click', e => {
+    const btn = e.target.closest('[data-pick]');
+    if (!btn) return;
+    selectedRecipientId = btn.dataset.pick;
+    updateRecipientChips(c);
+    updatePreview(c);
   });
+
+  updateRecipientChips(c);
 }
 
-// Recompute every send link's mailto: href from the current selections.
-function refreshSendLinks(c) {
+// Refresh each chip's label (with ✓ once opened) and selected-state styling.
+function updateRecipientChips(c) {
   const recipients = shownRecipients(c);
-  document.querySelectorAll('[data-send]').forEach(el => {
-    const r = recipients.find(x => x.id === el.dataset.send);
-    el.href = buildMailtoUrl(r.email, c.emailDefaults.subject, bodyForRecipient(c, r));
+  document.querySelectorAll('[data-pick]').forEach(btn => {
+    const r = recipients.find(x => x.id === btn.dataset.pick);
+    const isSelected = r.id === selectedRecipientId;
+    btn.className = 'px-3 py-1.5 rounded-lg border text-sm transition-colors ' +
+      (isSelected ? 'border-emerald-600 bg-emerald-50 font-semibold text-emerald-900'
+                  : 'border-gray-300 hover:bg-gray-50 text-gray-700');
+    btn.textContent = `${openedRecipients.has(r.id) ? '✓ ' : ''}${r.name} (${r.role})`;
   });
 }
 
-function markOpened(sendEl) {
-  if (sendEl.dataset.opened) return;
-  sendEl.dataset.opened = 'true';
-  sendEl.textContent = '✓ ' + sendEl.textContent.trim();
-  sendEl.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
-  sendEl.classList.add('bg-emerald-800');
+// Render the send + copy actions for the currently selected recipient.
+function updateSendRow(c) {
+  const r = selectedRecipient(c) || shownRecipients(c)[0];
+  const body = bodyForRecipient(c, r);
+  const host = document.getElementById('send-row');
+  host.innerHTML = `
+    <a href="${buildMailtoUrl(r.email, c.emailDefaults.subject, body)}" data-send
+       class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium text-center">
+       Open email to ${r.name} &rarr;
+    </a>
+    <button type="button" id="copy-btn"
+       class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">Copy email</button>
+  `;
+  host.querySelector('[data-send]').addEventListener('click', () => {
+    openedRecipients.add(r.id);
+    updateRecipientChips(c);
+  });
+  host.querySelector('#copy-btn').addEventListener('click', async () => {
+    await navigator.clipboard.writeText(body);
+    openedRecipients.add(r.id);
+    updateRecipientChips(c);
+    const btn = host.querySelector('#copy-btn');
+    btn.textContent = '✓ Copied';
+    setTimeout(() => { btn.textContent = 'Copy email'; }, 2000);
+  });
 }
 
 // ── Share ──────────────────────────────────────────────────
@@ -219,8 +230,8 @@ async function init() {
   renderPerspectives(campaign);
   renderPoints(campaign);
   wireWidget(campaign);
+  renderRecipientSelect(campaign);
   updatePreview(campaign);
-  renderSendList(campaign);
   renderShare(campaign);
 }
 
