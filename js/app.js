@@ -37,12 +37,92 @@ function renderAsk(c) {
   document.getElementById('ask-closing').textContent = c.ask.closing;
 }
 
+// ── Compose widget ─────────────────────────────────────────
+function renderPerspectives(c) {
+  selectedPerspective = c.defaultPerspective;
+  const host = document.getElementById('perspective-options');
+  host.innerHTML = c.perspectives.map(p => `
+    <label class="px-3 py-2 border rounded-lg cursor-pointer text-sm">
+      <input type="radio" name="perspective" value="${p.id}" class="mr-1"
+        ${p.id === c.defaultPerspective ? 'checked' : ''}>
+      ${p.label}
+    </label>
+  `).join('');
+  host.addEventListener('change', e => {
+    if (e.target.name === 'perspective') {
+      selectedPerspective = e.target.value;
+      updatePreview(c);
+    }
+  });
+}
+
+function renderPoints(c) {
+  selectedPoints.clear();
+  const host = document.getElementById('point-options');
+  host.innerHTML = c.talkingPoints.map(p => {
+    if (p.defaultSelected) selectedPoints.add(p.id);
+    return `
+      <label class="flex items-start gap-2 p-2 rounded-lg border border-gray-200 cursor-pointer text-sm">
+        <input type="checkbox" value="${p.id}" class="mt-1" ${p.defaultSelected ? 'checked' : ''}>
+        <span class="text-gray-800">${p.label}</span>
+      </label>`;
+  }).join('');
+  host.addEventListener('change', e => {
+    if (e.target.type !== 'checkbox') return;
+    if (e.target.checked) selectedPoints.add(e.target.value);
+    else selectedPoints.delete(e.target.value);
+    updatePreview(c);
+  });
+}
+
+function getSelections() {
+  return {
+    perspectiveId: selectedPerspective,
+    selectedPointIds: [...selectedPoints],
+    note: document.getElementById('note-input').value,
+    name: document.getElementById('name-input').value,
+    address: document.getElementById('address-input').value
+  };
+}
+
+// Build the email body for one recipient using the current selections.
+function bodyForRecipient(c, recipient) {
+  const s = getSelections();
+  const perspective = c.perspectives.find(p => p.id === s.perspectiveId);
+  return composeEmailBody({
+    salutation: recipient.salutation,
+    opening: perspective.opening,
+    fragments: selectedFragments(c, s.selectedPointIds),
+    note: s.note,
+    ask: c.ask,
+    name: s.name,
+    address: s.address
+  });
+}
+
+function updatePreview(c) {
+  document.getElementById('preview-subject').textContent = c.emailDefaults.subject;
+  // Preview uses the first shown recipient's salutation as a representative example.
+  const previewRecipient = shownRecipients(c)[0];
+  document.getElementById('preview-body').textContent = bodyForRecipient(c, previewRecipient);
+}
+
+function wireWidget(c) {
+  ['note-input', 'name-input', 'address-input'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => updatePreview(c));
+  });
+}
+
 // ── Init ───────────────────────────────────────────────────
 async function init() {
   campaign = await loadCampaign();
   renderHero(campaign);
   renderProblem(campaign);
   renderAsk(campaign);
+  renderPerspectives(campaign);
+  renderPoints(campaign);
+  wireWidget(campaign);
+  updatePreview(campaign);
 }
 
 init();
