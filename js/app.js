@@ -177,6 +177,39 @@ function markOpened(sendEl) {
   sendEl.classList.add('bg-emerald-800');
 }
 
+// ── Share ──────────────────────────────────────────────────
+function renderShare(c) {
+  const url = window.location.href.split('#')[0];
+  const text = c.meta.shareText;
+  document.getElementById('share-section').innerHTML = `
+    <p class="font-semibold text-gray-800 mb-3 text-sm">Share this with your neighbors:</p>
+    <div class="flex items-center gap-2 mb-3">
+      <input id="share-url" type="text" readonly value="${url}"
+        class="flex-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm" onclick="this.select()">
+      <button id="copy-url-btn" class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 text-sm">Copy URL</button>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <a target="_blank" rel="noopener" class="px-3 py-1.5 bg-sky-500 text-white rounded-lg text-sm"
+         href="https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}">X / Twitter</a>
+      <a target="_blank" rel="noopener" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm"
+         href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}">Facebook</a>
+      <button id="share-instagram" class="px-3 py-1.5 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white rounded-lg text-sm">Copy for Instagram</button>
+    </div>
+  `;
+
+  document.getElementById('copy-url-btn').addEventListener('click', async () => {
+    await navigator.clipboard.writeText(url);
+    const btn = document.getElementById('copy-url-btn');
+    btn.textContent = '✓ Copied';
+    setTimeout(() => { btn.textContent = 'Copy URL'; }, 2000);
+  });
+
+  document.getElementById('share-instagram').addEventListener('click', async () => {
+    await navigator.clipboard.writeText(`${text}\n\n${url}`);
+    alert('Link and message copied. Open Instagram, create a Story or post, and paste.');
+  });
+}
+
 // ── Init ───────────────────────────────────────────────────
 async function init() {
   campaign = await loadCampaign();
@@ -188,6 +221,7 @@ async function init() {
   wireWidget(campaign);
   updatePreview(campaign);
   renderSendList(campaign);
+  renderShare(campaign);
 }
 
 init();
