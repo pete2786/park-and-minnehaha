@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Park Ave &amp; Minnehaha Parkway — Make It Safe</title>
+  <meta name="description" content="Email Minneapolis City Council and Park Board to fix a dangerous intersection for kids, people on bikes, walkers, and drivers.">
+
+  <!-- Open Graph / Twitter (single static page — crawlers read these directly). -->
+  <!-- __SITE_BASE__ is replaced with the deployed base URL during deploy (see plan Task 12). -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="__SITE_BASE__">
+  <meta property="og:title" content="Park Ave &amp; Minnehaha Parkway — Make It Safe">
+  <meta property="og:description" content="Email Minneapolis City Council and Park Board to fix a dangerous intersection for kids, people on bikes, walkers, and drivers.">
+  <meta property="og:image" content="__SITE_BASE__images/intersection-aerial.svg">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="Park Ave &amp; Minnehaha Parkway — Make It Safe">
+  <meta property="twitter:description" content="Email Minneapolis City Council and Park Board to fix a dangerous intersection for kids, people on bikes, walkers, and drivers.">
+  <meta property="twitter:image" content="__SITE_BASE__images/intersection-aerial.svg">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-emerald-50 to-sky-100 p-4 sm:p-8">
+  <div class="max-w-3xl mx-auto space-y-6">
+
+    <!-- Hero -->
+    <header class="bg-white rounded-lg shadow-xl p-6 sm:p-8">
+      <h1 id="hero-title" class="text-3xl sm:text-4xl font-bold text-gray-900"></h1>
+      <p id="hero-subtitle" class="text-gray-600 mt-2"></p>
+      <img id="hero-image" alt="Park Ave & Minnehaha Parkway" class="w-full rounded-lg mt-4 border border-gray-200">
+    </header>
+
+    <!-- The problem -->
+    <section class="bg-white rounded-lg shadow p-6 sm:p-8">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">The problem</h2>
+      <div id="problem-points" class="space-y-4"></div>
+    </section>
+
+    <!-- The ask -->
+    <section class="bg-amber-50 border border-amber-200 rounded-lg p-6 sm:p-8">
+      <h2 class="text-xl font-semibold text-gray-800 mb-2">The ask</h2>
+      <p id="ask-summary" class="text-gray-800"></p>
+      <ul id="ask-items" class="list-disc list-inside text-gray-800 mt-2 space-y-1"></ul>
+      <p id="ask-closing" class="text-gray-700 mt-3"></p>
+    </section>
+
+    <!-- Write the council + park board -->
+    <section class="bg-white rounded-lg shadow p-6 sm:p-8 space-y-6">
+      <h2 class="text-xl font-semibold text-gray-800">Write the Council &amp; Park Board</h2>
+
+      <div>
+        <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">1. I am a…</h3>
+        <div id="perspective-options" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">2. Include these points</h3>
+        <div id="point-options" class="space-y-2"></div>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">3. Add a personal note (optional)</h3>
+        <textarea id="note-input" rows="3" placeholder="A sentence in your own words makes the biggest difference."
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500"></textarea>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Your name</label>
+          <input id="name-input" type="text" placeholder="Jane Doe"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Your address</label>
+          <input id="address-input" type="text" placeholder="123 Example Ave, Minneapolis, MN 55417"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500">
+        </div>
+      </div>
+
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <p class="text-sm font-medium text-gray-700 mb-1">Subject</p>
+        <p id="preview-subject" class="text-sm bg-white p-2 rounded border border-gray-300"></p>
+        <p class="text-sm font-medium text-gray-700 mt-3 mb-1">Preview</p>
+        <pre id="preview-body" class="text-sm bg-white p-3 rounded border border-gray-300 whitespace-pre-wrap font-sans"></pre>
+      </div>
+
+      <div>
+        <h3 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">4. Send to each (individual emails)</h3>
+        <div id="send-list" class="space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- Share -->
+    <section id="share-section" class="bg-white rounded-lg shadow p-6 sm:p-8"></section>
+
+    <!-- Footer -->
+    <footer class="text-center text-xs text-gray-500 px-4 pb-8">
+      <p><strong>Privacy:</strong> This tool runs entirely in your browser. Nothing you type — your note, name, or address — is collected, stored, or sent anywhere. It only leaves your device inside the email you choose to send.</p>
+    </footer>
+
+  </div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
