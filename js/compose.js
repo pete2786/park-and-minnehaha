@@ -13,3 +13,19 @@ export function selectedFragments(campaign, selectedIds) {
     .filter(p => selectedIds.includes(p.id))
     .map(p => p.fragment);
 }
+
+export function composeEmailBody({ salutation, opening, fragments, note, ask, name, address }) {
+  const blocks = [];
+  blocks.push(`${salutation},`);
+  blocks.push(opening);
+  for (const fragment of fragments) blocks.push(fragment);
+
+  const trimmedNote = (note || '').trim();
+  if (trimmedNote) blocks.push(trimmedNote);
+
+  blocks.push(ask.summary + '\n' + ask.items.map(item => `- ${item}`).join('\n'));
+  blocks.push(ask.closing);
+  blocks.push(`Sincerely,\n${name || '[Your Name]'}\n${address || '[Your Address]'}`);
+
+  return blocks.join('\n\n');
+}
