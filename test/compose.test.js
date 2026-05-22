@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { shownRecipients, buildMailtoUrl, selectedFragments, composeEmailBody } from '../js/compose.js';
+import { shownRecipients, buildMailtoUrl, selectedFragments, composeEmailBody, composeOpening } from '../js/compose.js';
 
 const campaign = JSON.parse(
   readFileSync(new URL('../data/campaign.json', import.meta.url), 'utf8')
@@ -74,4 +74,21 @@ test('composeEmailBody omits the note block when note is blank', () => {
 test('composeEmailBody uses real name and address when given', () => {
   const body = composeEmailBody(sampleArgs({ name: 'Jane Doe', address: '123 Park Ave' }));
   assert.ok(body.endsWith('Sincerely,\nJane Doe\n123 Park Ave'));
+});
+
+test('composeOpening joins a single role', () => {
+  assert.equal(composeOpening(['a parent'], 'L.', 'T.'), 'L. As a parent, T.');
+});
+
+test('composeOpening joins two roles with "and"', () => {
+  assert.equal(composeOpening(['a parent', 'someone who bikes'], 'L.', 'T.'),
+    'L. As a parent and someone who bikes, T.');
+});
+
+test('composeOpening joins three roles with serial comma', () => {
+  assert.equal(composeOpening(['a', 'b', 'c'], 'L.', 'T.'), 'L. As a, b, and c, T.');
+});
+
+test('composeOpening falls back to lead + tail when no roles are selected', () => {
+  assert.equal(composeOpening([], 'L.', 'T.'), 'L. T.');
 });

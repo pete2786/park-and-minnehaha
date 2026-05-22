@@ -14,6 +14,18 @@ export function selectedFragments(campaign, selectedIds) {
     .map(p => p.fragment);
 }
 
+function joinAnd(items) {
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
+}
+
+// Build the email opening from the selected role phrases. Reads naturally for any count.
+export function composeOpening(roles, lead, tail) {
+  if (!roles || roles.length === 0) return `${lead} ${tail}`;
+  return `${lead} As ${joinAnd(roles)}, ${tail}`;
+}
+
 export function composeEmailBody({ salutation, opening, fragments, note, ask, name, address }) {
   const blocks = [];
   blocks.push(`${salutation},`);

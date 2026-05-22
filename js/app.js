@@ -1,8 +1,8 @@
-import { shownRecipients, selectedFragments, composeEmailBody, buildMailtoUrl } from './compose.js';
+import { shownRecipients, selectedFragments, composeEmailBody, buildMailtoUrl, composeOpening } from './compose.js';
 
 // ── Module state ───────────────────────────────────────────
 let campaign = null;
-let selectedPerspective = null;
+const selectedPerspectives = new Set();
 const selectedPoints = new Set();
 
 // ── Data loading ───────────────────────────────────────────
@@ -21,13 +21,10 @@ function renderHero(c) {
 
 function renderProblem(c) {
   const host = document.getElementById('problem-points');
-  host.innerHTML = c.talkingPoints.map(p => `
-    <div class="border-l-4 border-emerald-400 pl-4">
-      <h3 class="font-semibold text-gray-900">${p.label}</h3>
-      ${p.image ? `<img src="${p.image}" alt="" class="w-full rounded mt-2 border border-gray-200">` : ''}
-      <p class="text-sm text-gray-700 mt-1">${p.fragment}</p>
-    </div>
-  `).join('');
+  host.innerHTML =
+    '<ul class="list-disc list-inside space-y-1 text-gray-800">' +
+    c.talkingPoints.map(p => `<li>${p.label}</li>`).join('') +
+    '</ul>';
 }
 
 function renderAsk(c) {
@@ -39,20 +36,21 @@ function renderAsk(c) {
 
 // ── Compose widget ─────────────────────────────────────────
 function renderPerspectives(c) {
-  selectedPerspective = c.defaultPerspective;
+  selectedPerspectives.clear();
+  c.defaultPerspectives.forEach(id => selectedPerspectives.add(id));
   const host = document.getElementById('perspective-options');
   host.innerHTML = c.perspectives.map(p => `
     <label class="px-3 py-2 border rounded-lg cursor-pointer text-sm">
-      <input type="radio" name="perspective" value="${p.id}" class="mr-1"
-        ${p.id === c.defaultPerspective ? 'checked' : ''}>
+      <input type="checkbox" name="perspective" value="${p.id}" class="mr-1"
+        ${selectedPerspectives.has(p.id) ? 'checked' : ''}>
       ${p.label}
     </label>
   `).join('');
   host.addEventListener('change', e => {
-    if (e.target.name === 'perspective') {
-      selectedPerspective = e.target.value;
-      updatePreview(c);
-    }
+    if (e.target.name !== 'perspective') return;
+    if (e.target.checked) selectedPerspectives.add(e.target.value);
+    else selectedPerspectives.delete(e.target.value);
+    updatePreview(c);
   });
 }
 
@@ -77,7 +75,7 @@ function renderPoints(c) {
 
 function getSelections() {
   return {
-    perspectiveId: selectedPerspective,
+    perspectiveIds: [...selectedPerspectives],
     selectedPointIds: [...selectedPoints],
     note: document.getElementById('note-input').value,
     name: document.getElementById('name-input').value,
@@ -88,10 +86,12 @@ function getSelections() {
 // Build the email body for one recipient using the current selections.
 function bodyForRecipient(c, recipient) {
   const s = getSelections();
-  const perspective = c.perspectives.find(p => p.id === s.perspectiveId);
+  const roles = c.perspectives
+    .filter(p => s.perspectiveIds.includes(p.id))
+    .map(p => p.role);
   return composeEmailBody({
     salutation: recipient.salutation,
-    opening: perspective.opening,
+    opening: composeOpening(roles, c.opening.lead, c.opening.tail),
     fragments: selectedFragments(c, s.selectedPointIds),
     note: s.note,
     ask: c.ask,

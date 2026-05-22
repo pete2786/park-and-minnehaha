@@ -19,18 +19,17 @@
       "email": "afrederick@minneapolisparks.org", "salutation": "Dear Commissioner Frederick", "shown": false }
   ],
   "perspectives": [
-    { "id": "parent",   "label": "Parent",
-      "opening": "As a parent of kids who travel through Park Ave and Minnehaha Parkway, I am writing to ask you to make this intersection safe." },
-    { "id": "bike",     "label": "Person who bikes",
-      "opening": "As someone who bikes through the Park Ave and Minnehaha Parkway intersection, I am writing to ask you to make it safe." },
-    { "id": "drive",    "label": "Driver",
-      "opening": "As someone who drives through the Park Ave and Minnehaha Parkway intersection, I am writing because it is confusing and dangerous and needs to be fixed." },
-    { "id": "walk",     "label": "Person who walks",
-      "opening": "As someone who walks through the Park Ave and Minnehaha Parkway intersection, I am writing to ask you to make it safe to cross." },
-    { "id": "neighbor", "label": "Neighbor",
-      "opening": "As a neighbor near Park Ave and Minnehaha Parkway, I am writing to ask you to make this intersection safe." }
+    { "id": "parent",   "label": "Parent",           "role": "a parent of kids who travel through it" },
+    { "id": "bike",     "label": "Person who bikes", "role": "someone who bikes through it" },
+    { "id": "drive",    "label": "Driver",           "role": "someone who drives through it" },
+    { "id": "walk",     "label": "Person who walks", "role": "someone who walks through it" },
+    { "id": "neighbor", "label": "Neighbor",         "role": "a neighbor who lives near it" }
   ],
-  "defaultPerspective": "parent",
+  "defaultPerspectives": ["parent"],
+  "opening": {
+    "lead": "I am writing about the Park Avenue and Minnehaha Parkway intersection.",
+    "tail": "I am asking you to make it safer for everyone."
+  },
   "talkingPoints": [
     { "id": "schools", "label": "A daily route to four schools", "defaultSelected": true,
       "fragment": "This intersection is a daily route to Hale Elementary, Field Elementary, Justice Page Middle School, and Washburn High School. Kids cross here every single day, and the current design makes that crossing dangerous and stressful for them and their families." },
@@ -40,8 +39,8 @@
       "fragment": "Even for drivers this intersection fails. People cannot tell whether it is one-way or two-way, the second parkway node adds confusion, and the intersection is so wide that left-turning cars cut the corner badly and right-turning cars take the turn at 45 to 50 degrees — almost a slingshot — instead of a safe 90-degree turn. A clearer, squared-up design makes it safer for drivers too." },
     { "id": "pedestrians", "label": "No safe way to cross on foot", "defaultSelected": true,
       "fragment": "There is no clear, safe way for a person on foot to get from one side to the other. Crossings are unmarked and the distances are long and exposed." },
-    { "id": "jurisdiction", "label": "One crew, one fix — no jurisdictional excuse", "defaultSelected": true,
-      "fragment": "Park Avenue is a city street up to about a block from the intersection, and the intersection itself is Park Board land — but Minneapolis Public Works does the work for both the city and the parks. There is no jurisdictional wall here, only a gap in funding and scheduling. You are exactly the people who can close that gap." }
+    { "id": "jurisdiction", "label": "One coordinated fix across city and parks", "defaultSelected": true,
+      "fragment": "Park Avenue is a city street up to about a block from the intersection, and the intersection itself is Park Board land. The encouraging part is that Minneapolis Public Works does the work for both the city and the parks, so a coordinated fix is very achievable. With your leadership on funding and scheduling, this can finally move forward." }
   ],
   "ask": {
     "summary": "This intersection is already named in the Minnehaha Parkway master plan, but it is unfunded and unscheduled. I am asking you to:",
