@@ -26,25 +26,25 @@
     { "id": "walk",     "label": "Person who walks", "role": "someone who walks through it" },
     { "id": "neighbor", "label": "Neighbor",         "role": "a neighbor who lives near it" }
   ],
-  "defaultPerspectives": ["parent"],
+  "defaultPerspectives": [],
   "opening": {
     "lead": "I am writing about the Park Avenue and Minnehaha Parkway intersection.",
     "tail": "I am asking you to make it safer for everyone."
   },
   "talkingPoints": [
-    { "id": "schools", "label": "A daily route to four schools", "defaultSelected": true,
+    { "id": "schools", "label": "A daily route to four schools", "defaultSelected": false,
       "context": "On the daily route to Hale, Field, Justice Page, and Washburn — kids cross here every day.",
       "fragment": "This intersection is a daily route to Hale Elementary, Field Elementary, Justice Page Middle School, and Washburn High School. Kids cross here every single day, and the current design makes that crossing dangerous and stressful for them and their families." },
-    { "id": "bike", "label": "The Park Ave bikeway to Parkway trail seam", "defaultSelected": true,
+    { "id": "bike", "label": "The Park Ave bikeway to Parkway trail seam", "defaultSelected": false,
       "context": "The main link between the Park Avenue bikeway and the Minnehaha Parkway trail.",
       "fragment": "This is a primary connection between the Park Avenue bike facilities and the Minnehaha Parkway trail system. A major link in our bike network should be one of the clearest, safest intersections in the city — instead it is confusing, unmarked, and frankly dangerous." },
-    { "id": "drivers", "label": "Confusing and fast for drivers", "defaultSelected": true,
+    { "id": "drivers", "label": "Confusing and fast for drivers", "defaultSelected": false,
       "context": "Drivers can't tell if it's one-way or two-way, and the wide angles make turns far too fast.",
       "fragment": "Even for drivers this intersection fails. People cannot tell whether it is one-way or two-way, the second parkway node adds confusion, and the intersection is so wide that left-turning cars cut the corner badly and right-turning cars take the turn at 45 to 50 degrees — almost a slingshot — instead of a safe 90-degree turn. A clearer, squared-up design makes it safer for drivers too." },
-    { "id": "pedestrians", "label": "No safe way to cross on foot", "defaultSelected": true,
+    { "id": "pedestrians", "label": "No safe way to cross on foot", "defaultSelected": false,
       "context": "There's no clear, safe way to cross on foot.",
       "fragment": "There is no clear, safe way for a person on foot to get from one side to the other. Crossings are unmarked and the distances are long and exposed." },
-    { "id": "jurisdiction", "label": "One coordinated fix across city and parks", "defaultSelected": true,
+    { "id": "jurisdiction", "label": "One coordinated fix across city and parks", "defaultSelected": false,
       "context": "City and Park Board land meet here — but one Public Works team can fix it.",
       "fragment": "Park Avenue is a city street up to about a block from the intersection, and the intersection itself is Park Board land. The encouraging part is that Minneapolis Public Works does the work for both the city and the parks, so a coordinated fix is very achievable. With your leadership on funding and scheduling, this can finally move forward." }
   ],
@@ -62,7 +62,7 @@
   "meta": {
     "ogTitle": "Park Ave & Minnehaha Parkway — Make It Safe",
     "ogDescription": "Email Minneapolis City Council and Park Board to fix a dangerous intersection for kids, people on bikes, walkers, and drivers.",
-    "ogImage": "images/intersection-aerial.svg",
+    "ogImage": "images/intersection-aerial.png",
     "shareText": "Help make the Park Ave & Minnehaha Parkway intersection safe — email Minneapolis City Council and Park Board in one click."
   }
 }

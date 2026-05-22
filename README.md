@@ -26,10 +26,9 @@ npm test           # node --test  — unit tests for js/compose.js, zero depende
 ```
 
 ## Images
-`images/intersection-aerial.svg` is a placeholder. Drop in a real aerial/map (ideally a 1200×630 JPG
-named `intersection-aerial.jpg`) and update the `meta.ogImage` path in `data/campaign.json`. To add a
-photo to a talking point, drop the file in `images/` and add `"image": "images/your-file.jpg"` to that
-talking point in `data/campaign.json`.
+`images/intersection-aerial.png` is the hero/aerial and the social-preview (OG) image. To swap it,
+replace that file or update the `meta.ogImage` path in `data/campaign.json`. (It's ~3.6 MB; resizing to
+~1200px wide would speed up load — `sips -Z 1200 images/intersection-aerial.png` on macOS.)
 
 ## Deploy
 Static site on GitHub Pages — push to `main`. See `CLAUDE.md` for the one-time setup and the

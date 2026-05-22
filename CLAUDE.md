@@ -24,7 +24,7 @@ Add tests there when changing `js/compose.js`.
 2. Replace the `__SITE_BASE__` token in `index.html` with `https://pete2786.github.io/<repo-name>/`
    (this fixes the absolute OG/Twitter image + URL for social previews), commit, push.
 3. In the repo: Settings → Pages → deploy from `main` (root). Wait for the Pages build.
-4. For working social previews, replace the placeholder SVG with a real 1200×630 JPG.
+4. The OG image (`images/intersection-aerial.png`) is best around 1200×630; resize if needed.
 
 ## Out of scope (v1)
 Usage counter/tracking, multi-issue routing, before/after diagram, PDF, any backend. The send action
