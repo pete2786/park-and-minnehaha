@@ -19,21 +19,7 @@ function renderHero(c) {
   document.getElementById('hero-title').textContent = c.campaign.title;
   document.getElementById('hero-subtitle').textContent = c.campaign.subtitle;
   document.getElementById('hero-image').src = c.meta.ogImage;
-}
-
-function renderProblem(c) {
-  const host = document.getElementById('problem-points');
-  host.innerHTML =
-    '<ul class="list-disc list-inside space-y-1 text-gray-800">' +
-    c.talkingPoints.map(p => `<li>${p.label}</li>`).join('') +
-    '</ul>';
-}
-
-function renderAsk(c) {
-  document.getElementById('ask-summary').textContent = c.ask.summary;
-  document.getElementById('ask-items').innerHTML =
-    c.ask.items.map(item => `<li>${item}</li>`).join('');
-  document.getElementById('ask-closing').textContent = c.ask.closing;
+  document.getElementById('hero-intro').textContent = c.campaign.intro;
 }
 
 // ── Compose widget ─────────────────────────────────────────
@@ -62,9 +48,12 @@ function renderPoints(c) {
   host.innerHTML = c.talkingPoints.map(p => {
     if (p.defaultSelected) selectedPoints.add(p.id);
     return `
-      <label class="flex items-start gap-2 p-2 rounded-lg border border-gray-200 cursor-pointer text-sm">
+      <label class="flex items-start gap-2 p-3 rounded-lg border border-gray-200 hover:bg-gray-50 cursor-pointer">
         <input type="checkbox" value="${p.id}" class="mt-1" ${p.defaultSelected ? 'checked' : ''}>
-        <span class="text-gray-800">${p.label}</span>
+        <span>
+          <span class="block font-medium text-gray-800 text-sm">${p.label}</span>
+          <span class="block text-xs text-gray-500 mt-0.5">${p.context}</span>
+        </span>
       </label>`;
   }).join('');
   host.addEventListener('change', e => {
@@ -225,8 +214,6 @@ function renderShare(c) {
 async function init() {
   campaign = await loadCampaign();
   renderHero(campaign);
-  renderProblem(campaign);
-  renderAsk(campaign);
   renderPerspectives(campaign);
   renderPoints(campaign);
   wireWidget(campaign);
