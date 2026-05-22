@@ -105,12 +105,76 @@ function updatePreview(c) {
   // Preview uses the first shown recipient's salutation as a representative example.
   const previewRecipient = shownRecipients(c)[0];
   document.getElementById('preview-body').textContent = bodyForRecipient(c, previewRecipient);
+  if (document.querySelector('[data-send]')) refreshSendLinks(c);
 }
 
 function wireWidget(c) {
   ['note-input', 'name-input', 'address-input'].forEach(id => {
     document.getElementById(id).addEventListener('input', () => updatePreview(c));
   });
+}
+
+// ── Send checklist (one individual email per recipient) ────
+function renderSendList(c) {
+  const recipients = shownRecipients(c);
+  const bodies = {};                       // group recipients by governing body
+  recipients.forEach(r => { (bodies[r.body] ||= []).push(r); });
+
+  const host = document.getElementById('send-list');
+  host.innerHTML = Object.entries(bodies).map(([body, members]) => `
+    <div>
+      <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">${body}</p>
+      <div class="space-y-2">
+        ${members.map(r => `
+          <div class="flex items-center gap-2" data-recipient="${r.id}">
+            <a href="#" data-send="${r.id}"
+               class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium">
+              Email ${r.name} (${r.role})
+            </a>
+            <button type="button" data-copy="${r.id}"
+               class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">Copy</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  // Set/refresh each send link's mailto href whenever it (or anything) changes.
+  refreshSendLinks(c);
+
+  host.addEventListener('click', async e => {
+    const sendEl = e.target.closest('[data-send]');
+    const copyEl = e.target.closest('[data-copy]');
+    if (sendEl) {
+      markOpened(sendEl);                  // let the default mailto navigation proceed
+      return;
+    }
+    if (copyEl) {
+      e.preventDefault();
+      const r = recipients.find(x => x.id === copyEl.dataset.copy);
+      await navigator.clipboard.writeText(bodyForRecipient(c, r));
+      const original = copyEl.textContent;
+      copyEl.textContent = '✓ Copied';
+      setTimeout(() => { copyEl.textContent = original; }, 2000);
+    }
+  });
+}
+
+// Recompute every send link's mailto: href from the current selections.
+function refreshSendLinks(c) {
+  const recipients = shownRecipients(c);
+  document.querySelectorAll('[data-send]').forEach(el => {
+    const r = recipients.find(x => x.id === el.dataset.send);
+    el.href = buildMailtoUrl(r.email, c.emailDefaults.subject, bodyForRecipient(c, r));
+  });
+}
+
+function markOpened(sendEl) {
+  if (sendEl.dataset.opened) return;
+  sendEl.dataset.opened = 'true';
+  sendEl.textContent = '✓ ' + sendEl.textContent.trim();
+  sendEl.classList.remove('bg-emerald-600', 'hover:bg-emerald-700');
+  sendEl.classList.add('bg-emerald-800');
 }
 
 // ── Init ───────────────────────────────────────────────────
@@ -123,6 +187,7 @@ async function init() {
   renderPoints(campaign);
   wireWidget(campaign);
   updatePreview(campaign);
+  renderSendList(campaign);
 }
 
 init();
