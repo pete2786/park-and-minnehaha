@@ -156,12 +156,18 @@ function updateSendRow(c) {
   const body = bodyForRecipient(c, r);
   const host = document.getElementById('send-row');
   host.innerHTML = `
-    <a href="${buildMailtoUrl(r.email, c.emailDefaults.subject, body)}" data-send
-       class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium text-center">
-       Open email to ${r.name} &rarr;
-    </a>
-    <button type="button" id="copy-btn"
-       class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">Copy email</button>
+    <p class="text-sm text-gray-600">
+      Sending to <span class="font-medium text-gray-800">${r.name}</span> (${r.body}, ${r.role}) &middot;
+      <a href="mailto:${r.email}" class="text-emerald-700 hover:underline break-all">${r.email}</a>${r.phone ? ` &middot; <span class="text-gray-700">${r.phone}</span>` : ''}
+    </p>
+    <div class="flex gap-2">
+      <a href="${buildMailtoUrl(r.email, c.emailDefaults.subject, body)}" data-send
+         class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors text-sm font-medium text-center">
+         Open email to ${r.name} &rarr;
+      </a>
+      <button type="button" id="copy-btn"
+         class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm">Copy email</button>
+    </div>
   `;
   host.querySelector('[data-send]').addEventListener('click', () => {
     openedRecipients.add(r.id);
